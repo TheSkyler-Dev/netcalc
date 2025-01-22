@@ -41,4 +41,4 @@ Main: `netcalc`
 Flags are only allowed behind the IP address except for:
 - `--broacast`, `--net`, `--cidr`
 
-Note: only double dash (--) flags are allowed both in front of the address or bhind it.
+Note: only double dash (--) flags are allowed both in front of the address or bhind it. Single dash (-) flags are only allowed behind the IP address.
