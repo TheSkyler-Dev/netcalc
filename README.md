@@ -3,7 +3,7 @@
 
 ![Static Badge](https://img.shields.io/badge/License-GNU_GPL--v3.0-blue?style=flat&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html%23license-text)
 ![Static Badge](https://img.shields.io/badge/Status-in%20development-yellow?style=flat)
-![Static Badge](https://img.shields.io/badge/Codebase-unavailable-red?style=flat)
+![Static Badge](https://img.shields.io/badge/Codebase-available-green?style=flat)
 
 
 Netcalc (`netcalc`) is a simple command line utility program to calculate IPv4 network characteristics.
@@ -31,7 +31,7 @@ Main: `netcalc`
 - `-r` or `--range`: calculate network range (addressable hosts + broadcast and network)
 - `-n` or  `--net`: calculate network address
 - `-a` or  `--addressable`: calculate addressabe host range only
-- `-c` or `--cidr`: calculate CIDR address
+- ~~`-c` or `--cidr`: calculate CIDR address~~
 - `-i` or `--ident`: identify network type
 - `-s` or `--snm`: calculate subnet mask
 - `-h` or `--help`: display help/list valid flags and usage
