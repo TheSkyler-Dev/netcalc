@@ -10,11 +10,11 @@ Netcalc (`netcalc`) is a simple command line utility program to calculate IPv4 n
 
 # Compatibility
 Compatible with any terminal (shell, bash, pwsh, Zsh)
-## Features:
+## Features
 - calculate all network characteristics from any IP address
 - identify network type, error when given APIPA address
 
-## Dependencies: 
+## Dependencies 
 - [CLI11](https://github.com/CLIUtils/CLI11)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
