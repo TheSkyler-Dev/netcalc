@@ -20,7 +20,7 @@ Compatible with any terminal (shell, bash, pwsh, Zsh)
 ### Dependencies: 
 - [CLI11](https://github.com/CLIUtils/CLI11)
 - bitset (std)
-- a C/C++ compiler (gcc/g++, clang, MSVC etc.)
+- a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
 - CMake 3.16.0 or later
 
 # Commands
@@ -41,4 +41,4 @@ Main: `netcalc`
 Flags are only allowed behind the IP address except for:
 - `--broacast`, `--net`, `--cidr`
 
-Note: only double dash (--) flags are allowed both in front of the address or bhind it. Single dash (-) flags are only allowed behind the IP address.
+Note: only long (--) flags are allowed both in front of the address or bhind it. Short (-) flags are only allowed behind the IP address.
