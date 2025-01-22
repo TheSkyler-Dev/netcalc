@@ -1,7 +1,7 @@
 # Netcalc
 
 
-![Static Badge](https://img.shields.io/badge/License-GPL%20v3.0-blue?style=flat&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html%23license-text)
+![Static Badge](https://img.shields.io/badge/License-GNU_GPL--v3.0-blue?style=flat&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html%23license-text)
 ![Static Badge](https://img.shields.io/badge/Status-in%20development-yellow?style=flat)
 ![Static Badge](https://img.shields.io/badge/Codebase-unavailable-red?style=flat)
 
