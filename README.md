@@ -14,9 +14,7 @@ Compatible with any terminal (shell, bash, pwsh, Zsh)
 - calculate all network characteristics from any IP address
 - identify network type, error when given APIPA address
 
-### Languages: 
-- C++
-### Dependencies: 
+## Dependencies: 
 - [CLI11](https://github.com/CLIUtils/CLI11)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
