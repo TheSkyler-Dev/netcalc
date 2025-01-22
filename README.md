@@ -33,6 +33,7 @@ Main: `netcalc`
 - `-a` or  `--addressable`: calculate addressabe host range only
 - `-c` or `--cidr`: calculate CIDR address
 - `-i` or `--ident`: identify network type
+- `-s` or `--snm`: calculate subnet mask
 - `-h` or `--help`: display help/list valid flags and usage
 
 Flags are only allowed behind the IP address except for:
