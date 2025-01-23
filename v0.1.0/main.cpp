@@ -7,6 +7,7 @@
 #include <bitset>
 
 //helper function: IP to Binary notation
+// Converts an IPv4 address from string format to a 32-bit binary representation
 std::bitset<32> ipToBits(const std::string& ipAddr){
     std::stringstream ss(ipAddr);
     std::string octet;
@@ -15,11 +16,12 @@ std::bitset<32> ipToBits(const std::string& ipAddr){
     for (int i = 3; i >= 0; --i){
         std::getline(ss, octet, '.');
         ipInt |= (std::stoi(octet) << (i * 8));
-    };
+    }
     return std::bitset<32>(ipInt);
-};
+}
 
 //helper function: Binary notation to IP
+// Converts a 32-bit binary representation to an IPv4 address in string format
 std::string bitsToIP(const std::bitset<32>& ipBin){
     uint32_t ipInt = ipBin.to_ulong();
     std::ostringstream res;
@@ -27,8 +29,8 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     for (int i = 3; i >= 0; --i){
         res << ((ipInt >> (i * 8)) & 0xFF);
         if(i > 0) res << ".";
-    };
     return res.str();
+}
 };
 
 // Define IP ranges
@@ -97,8 +99,6 @@ int main(int argc, char** argv){
 
     app.add_flag("-a, --addressable", calcAddressable, "Calculate adddressable host range only");
 
-    //app.add_flag("-c, --cidr", calcCIDR, "Calculate CIDR address");
-
     app.add_flag("-s, --snm", calcSNM, "Calculate subnet mask");
 
     bool identType = false;
@@ -128,10 +128,6 @@ int main(int argc, char** argv){
     if(showHelp){
         std::cout << app.help() << "\n";
     }
-
-    /*if(calcCIDR){
-
-    }*/
 
     if(calcSNM){
 
