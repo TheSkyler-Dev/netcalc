@@ -1,6 +1,7 @@
 // Netcalc (c) 2025 TheSkyler-Dev Licensed under GNU GPL-v3.0
 #include <iostream>
 #include <string>
+#include <array>
 #include <sstream>
 #include <CLI11.hpp>
 #include <bitset>
@@ -29,6 +30,11 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     };
     return res.str();
 };
+
+//function to identify network type
+std::string ipIdent (const std::string& ipAddr){
+    std::array<std::string, 2> APIPA = {"169.254.0.0", "169.254.255.255"};
+}
 
 //main logic
 int main(int argc, char** argv){
