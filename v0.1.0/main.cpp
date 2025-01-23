@@ -31,9 +31,37 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     return res.str();
 };
 
-//function to identify network type
-std::string ipIdent (const std::string& ipAddr){
-    std::array<std::string, 2> APIPA = {"169.254.0.0", "169.254.255.255"};
+// Define IP ranges
+const std::array<std::pair<uint32_t, uint32_t>, 3> PRIVATE_RANGES = {{
+    {ipToBits("10.0.0.0").to_ulong(), ipToBits("10.255.255.255").to_ulong()},
+    {ipToBits("172.16.0.0").to_ulong(), ipToBits("172.31.255.255").to_ulong()},
+    {ipToBits("192.168.0.0").to_ulong(), ipToBits("192.168.255.255").to_ulong()}
+}};
+
+const std::pair<uint32_t, uint32_t> APIPA_RANGE = {
+    ipToBits("169.254.0.0").to_ulong(), ipToBits("169.254.255.255").to_ulong()
+};
+
+// Function to check if IP is within a range
+bool isInRange(uint32_t ip, const std::pair<uint32_t, uint32_t>& range) {
+    return ip >= range.first && ip <= range.second;
+}
+
+// Function to identify network type
+std::string ipIdent(const std::string& ipAddr) {
+    uint32_t ipInt = ipToBits(ipAddr).to_ulong();
+
+    for (const auto& range : PRIVATE_RANGES) {
+        if (isInRange(ipInt, range)) {
+            return "Private";
+        }
+    }
+
+    if (isInRange(ipInt, APIPA_RANGE)) {
+        return "APIPA";
+    }
+
+    return "Public";
 }
 
 //main logic
@@ -124,11 +152,12 @@ int main(int argc, char** argv){
     }
 
     if(identType){
-
+        std::string networkType = ipIdent(ipAddr);
+        std::cout << "The IP address " << ipAddr << " is a " << networkType << " address.\n";
     }
 
     if(calcAll){
 
     };
     return 0;
-}    
+}
