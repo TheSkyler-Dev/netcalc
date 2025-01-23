@@ -84,8 +84,6 @@ int main(int argc, char** argv){
 
     app.add_option("--net", calcBasis, "Use network address as basis")->check(CLI::IsMember({"--net"}));
 
-    app.add_option("--cidr", calcBasis, "Use CIDR address as basis")->check(CLI::IsMember({"--cidr"}));
-
     //IP address
     std::string ipAddr = "default";
     app.add_option("ip", ipAddr, "IP Address")->check(CLI::ValidIPV4)->required();
