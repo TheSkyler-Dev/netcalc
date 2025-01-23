@@ -15,7 +15,7 @@ Compatible with any terminal (shell, bash, pwsh, Zsh)
 - identify network type, error when given APIPA address
 
 ## Dependencies 
-- [CLI11](https://github.com/CLIUtils/CLI11)
+- [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
 - CMake 3.16.0 or later
