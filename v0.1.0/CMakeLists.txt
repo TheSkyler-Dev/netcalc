@@ -30,7 +30,7 @@ target_precompile_headers(netcalc PRIVATE
     <iostream>
     <string>
     CLI11.hpp
-    <stdexcept>
+    <bitset>
 )
 
 if(MSVC)
