@@ -80,6 +80,8 @@ int main(int argc, char** argv){
     //IP address
     std::string ipAddr = "default";
     app.add_option("ip", ipAddr, "IP Address")->check(CLI::ValidIPV4)->required();
+    std::string subnet = "/def";
+    app.add_option("sn", subnet, "CIDR subnet identifier")->required();
 
     //flags behind IP address
     //initialise all
