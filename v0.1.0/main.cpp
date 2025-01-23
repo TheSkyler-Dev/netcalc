@@ -123,40 +123,42 @@ int main(int argc, char** argv){
         return 1;
     };
 
-    if(!ipAddr.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable || calcCIDR)){
+    if(!ipAddr.empty() && !subnet.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable || calcCIDR)){
         std::cout << "Calculating requested network characteristics for: " << ipAddr << "n";
-    } else if(ipAddr.empty()){
+    } else if(ipAddr.empty() && subnet.empty()){
         std::cerr << "Error: Short flags (-A, -b, -e, etc.) may only appear behind the IP Address.\n";
         return 1;
     };
 
     std::bitset<32> ipBin = ipToBits(ipAddr);
+    std::bitset<32> subnetBin = subnetToBits(subnet);
 
     if(showHelp){
         std::cout << app.help() << "\n";
-    }
+        }
 
-    if(calcSNM){
+        if(calcSNM){
+            std::cout << "IP: " << ipAddr << subnet << "\n";
+            std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
+        }
 
-    }
+        if(calcNet){
 
-    if(calcNet){
+        }
 
-    }
+        if(calcRange){
 
-    if(calcRange){
+        }
 
-    }
+        if(calcAddressable){
 
-    if(calcAddressable){
+        }
 
-    }
+        if(calcBroadcast){
 
-    if(calcBroadcast){
+        }
 
-    }
-
-    if(identType){
+        if(identType){
         std::string networkType = ipIdent(ipAddr);
         std::cout << "IP: " << ipAddr << '\n';
         std::cout << "Address type: " << networkType << "\n";
