@@ -20,6 +20,13 @@ std::bitset<32> ipToBits(const std::string& ipAddr){
     return std::bitset<32>(ipInt);
 }
 
+//convert CIDR subnet to binary
+std::bitset<32> subnetToBits(const std::string& subnet){
+    int prefixLength = std::stoi(subnet.substr(1));
+    uint32_t subnetInt = (0xFFFFFFFF << (32 - prefixLength)) & 0xFFFFFFFF;
+    return std::bitset<32>(subnetInt);
+}
+
 //helper function: Binary notation to IP
 // Converts a 32-bit binary representation to an IPv4 address in string format
 std::string bitsToIP(const std::bitset<32>& ipBin){
@@ -30,8 +37,8 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
         res << ((ipInt >> (i * 8)) & 0xFF);
         if(i > 0) res << ".";
     return res.str();
+    }
 }
-};
 
 // Define IP ranges
 const std::array<std::pair<uint32_t, uint32_t>, 3> PRIVATE_RANGES = {{
@@ -151,7 +158,8 @@ int main(int argc, char** argv){
 
     if(identType){
         std::string networkType = ipIdent(ipAddr);
-        std::cout << "The IP address " << ipAddr << " is a " << networkType << " address.\n";
+        std::cout << "IP: " << ipAddr << '\n';
+        std::cout << "Address type: " << networkType << "\n";
     }
 
     if(calcAll){
