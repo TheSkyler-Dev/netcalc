@@ -42,7 +42,7 @@ target_precompile_headers(netcalc PRIVATE
 target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
 # Ensure the include directories are set correctly
-target_include_directories(netcalc PRIVATE ${CLI11_SOURCE_DIR}/include)
+target_include_directories(netcalc PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 if(MSVC)
   target_compile_options(netcalc PRIVATE /W4)
