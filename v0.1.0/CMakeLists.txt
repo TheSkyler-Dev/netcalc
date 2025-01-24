@@ -25,11 +25,21 @@ if(NOT TARGET CLI11::CLI11)
   message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
 endif()
 
+# Copy CLI11 headers to the project's include directory
+add_custom_target(copy_cli11_headers ALL
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CLI11_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include
+  COMMENT "Copying CLI11 headers to the project's include directory"
+)
+
 set(SOURCES
     main.cpp
 )
 
 add_executable(netcalc ${SOURCES})
+
+# Ensure the headers are copied before building the target
+add_dependencies(netcalc copy_cli11_headers)
 
 target_precompile_headers(netcalc PRIVATE
     <iostream>
@@ -41,7 +51,7 @@ target_precompile_headers(netcalc PRIVATE
 target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
 # Ensure the include directories are set correctly
-target_include_directories(netcalc PRIVATE ${CLI11_SOURCE_DIR}/include)
+target_include_directories(netcalc PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 if(MSVC)
   target_compile_options(netcalc PRIVATE /W4)
@@ -53,4 +63,4 @@ install(TARGETS netcalc DESTINATION bin)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
-message(STATUS "CLI11 include directory: ${CLI11_SOURCE_DIR}/include")
+message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")

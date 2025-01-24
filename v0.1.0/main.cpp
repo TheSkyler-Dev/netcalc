@@ -36,8 +36,9 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     for (int i = 3; i >= 0; --i){
         res << ((ipInt >> (i * 8)) & 0xFF);
         if(i > 0) res << ".";
-    return res.str();
+        return res.str();
     }
+    return res.str();
 }
 
 // Define IP ranges
