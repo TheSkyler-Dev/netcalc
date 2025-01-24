@@ -20,6 +20,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(CLI11)
 
+# Ensure CLI11 is available
+if(NOT TARGET CLI11::CLI11)
+  message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
+endif()
+
 set(SOURCES
     main.cpp
 )
@@ -36,6 +41,9 @@ target_precompile_headers(netcalc PRIVATE
 # Link the CLI11 library to the netcalc target
 target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
+# Ensure the include directories are set correctly
+target_include_directories(netcalc PRIVATE ${CLI11_SOURCE_DIR}/include)
+
 if(MSVC)
   target_compile_options(netcalc PRIVATE /W4)
 else()
@@ -46,4 +54,4 @@ install(TARGETS netcalc DESTINATION bin)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
-message(STATUS "Include directories: ${PROJECT_SOURCE_DIR}/include")
+message(STATUS "CLI11 include directory: ${CLI11_SOURCE_DIR}/include")
