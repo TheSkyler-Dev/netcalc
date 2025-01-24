@@ -44,7 +44,7 @@ add_dependencies(netcalc copy_cli11_headers)
 target_precompile_headers(netcalc PRIVATE
     <iostream>
     <string>
-    CLI11.hpp
+    <${PROJECT_SOURCE_DIR}/include/CLI11.hpp>
     <bitset>
 )
 
