@@ -4,7 +4,7 @@
 #include <array>
 #include <sstream>
 #include <bitset>
-#include <CLI/CLI.hpp>
+#include <CLI/CLI.hpp> // Correct header for CLI11
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
@@ -36,7 +36,6 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     for (int i = 3; i >= 0; --i){
         res << ((ipInt >> (i * 8)) & 0xFF);
         if(i > 0) res << ".";
-        return res.str();
     }
     return res.str();
 }
@@ -82,7 +81,6 @@ int main(int argc, char** argv){
     //basis flags
     std::string calcBasis;
     app.add_option("--broadcast", calcBasis, "Use broadcast address as basis")->check(CLI::IsMember({"--broadcast"}));
-
     app.add_option("--net", calcBasis, "Use network address as basis")->check(CLI::IsMember({"--net"}));
 
     //IP address
@@ -96,15 +94,10 @@ int main(int argc, char** argv){
     bool calcAll = false, calcBroadcast = false, calcRange = false, calcNet = false, calcAddressable = false, calcCIDR = false, calcSNM = false;
 
     app.add_flag("-A, --all", calcAll, "Calculate all network characteristics");
-
     app.add_flag("-b, --broadcast", calcBroadcast, "Calculate only the broadcast address");
-
     app.add_flag("-r, --range", calcRange, "Calculate the full network range");
-
     app.add_flag("-n, --net", calcNet, "Calculate network address");
-
     app.add_flag("-a, --addressable", calcAddressable, "Calculate adddressable host range only");
-
     app.add_flag("-s, --snm", calcSNM, "Calculate subnet mask");
 
     bool identType = false;
@@ -148,12 +141,12 @@ int main(int argc, char** argv){
 
     if(calcRange){
         std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin / ~subnetBin) << "\n";
+        std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
     }
 
     if(calcAddressable){
         std::cout << "IP: " << ipAddr << subnet << "\n";
-        std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin) + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+        std::cout << "Addressable Host Range: " << bitsToIP(std::bitset<32>((ipBin & subnetBin).to_ulong() + 1)) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
     }
 
     if(calcBroadcast){
@@ -173,7 +166,7 @@ int main(int argc, char** argv){
         std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
         std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
         std::cout << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
-        std::cout << "Addressable Host Range: " << bitsToIP(ipBin & subnetBin) + 1 << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+        std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin).to_ulong() + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
         std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
     };
     return 0;
