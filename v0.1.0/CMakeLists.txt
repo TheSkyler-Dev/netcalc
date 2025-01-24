@@ -33,8 +33,11 @@ target_precompile_headers(netcalc PRIVATE
     <bitset>
 )
 
+# Link the CLI11 library to the netcalc target
+target_link_libraries(netcalc PRIVATE CLI11::CLI11)
+
 if(MSVC)
-  target_compile_options(Multiconvert PRIVATE /W4)
+  target_compile_options(netcalc PRIVATE /W4)
 else()
   target_compile_options(netcalc PRIVATE -Wall -Wextra -Wpedantic)
 endif()
