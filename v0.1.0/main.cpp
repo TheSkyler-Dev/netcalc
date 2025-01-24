@@ -147,7 +147,7 @@ int main(int argc, char** argv){
 
         if(calcRange){
             std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIp(ipBin / ~subnetBin) << "\n";
+            std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin / ~subnetBin) << "\n";
         }
 
         if(calcAddressable){
@@ -167,7 +167,13 @@ int main(int argc, char** argv){
     }
 
     if(calcAll){
-
+        std::cout << "IP: " << ipAddr << subnet << "\n";
+        std::cout << "Address type:" << ipIdent(ipAddr) << "\n";
+        std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
+        std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
+        std::cout << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+        std::cout << "Addressable Host Range: " << bitsToIP(ipBin & subnetBin) + 1 << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+        std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
     };
     return 0;
 } //171 lines of C++
