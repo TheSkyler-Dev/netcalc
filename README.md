@@ -15,7 +15,7 @@ Compatible with any terminal (shell, bash, pwsh, Zsh)
 - identify network type, error when given APIPA address
 
 ## Dependencies 
-- [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils)
+- [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils) (CMakeLists is set up to fetch this dependency on build time)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
 - CMake 3.16.0 or later
@@ -31,12 +31,11 @@ Main: `netcalc`
 - `-r` or `--range`: calculate network range (addressable hosts + broadcast and network)
 - `-n` or  `--net`: calculate network address
 - `-a` or  `--addressable`: calculate addressabe host range only
-- ~~`-c` or `--cidr`: calculate CIDR address~~
 - `-i` or `--ident`: identify network type
 - `-s` or `--snm`: calculate subnet mask
 - `-h` or `--help`: display help/list valid flags and usage
 
 Flags are only allowed behind the IP address except for:
-- `--broacast`, `--net`, `--cidr`
+- `--broacast`, `--net`
 
 Note: only long (--) flags are allowed both in front of the address or bhind it. Short (-) flags are only allowed behind the IP address.
