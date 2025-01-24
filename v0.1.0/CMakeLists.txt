@@ -12,25 +12,27 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include(FetchContent)
-FetchContent_Declare(
-  CLI11
-  GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
-  GIT_TAG v2.4.2
-)
-FetchContent_MakeAvailable(CLI11)
+#include(FetchContent)
+#FetchContent_Declare(
+#  CLI11
+#  GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+#  GIT_TAG v2.4.2
+#)
+#FetchContent_MakeAvailable(CLI11)
 
 # Ensure CLI11 is available
-if(NOT TARGET CLI11::CLI11)
-  message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
-endif()
+#if(NOT TARGET CLI11::CLI11)
+#  message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
+#endif()
 
 # Copy CLI11 headers to the project's include directory
-add_custom_target(copy_cli11_headers ALL
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-  ${CLI11_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include
-  COMMENT "Copying CLI11 headers to the project's include directory"
-)
+#add_custom_target(copy_cli11_headers ALL
+#  COMMAND ${CMAKE_COMMAND} -E copy_directory
+#  ${cli11_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include
+#  COMMENT "Copying CLI11 headers to the project's include directory"
+#)
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(SOURCES
     main.cpp
@@ -39,17 +41,16 @@ set(SOURCES
 add_executable(netcalc ${SOURCES})
 
 # Ensure the headers are copied before building the target
-add_dependencies(netcalc copy_cli11_headers)
+#add_dependencies(netcalc copy_cli11_headers)
 
 target_precompile_headers(netcalc PRIVATE
     <iostream>
     <string>
-    <${PROJECT_SOURCE_DIR}/include/CLI11.hpp>
     <bitset>
 )
 
 # Link the CLI11 library to the netcalc target
-target_link_libraries(netcalc PRIVATE CLI11::CLI11)
+#target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
 # Ensure the include directories are set correctly
 target_include_directories(netcalc PRIVATE ${PROJECT_SOURCE_DIR}/include)
@@ -64,4 +65,4 @@ install(TARGETS netcalc DESTINATION bin)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
-message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
+#message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")

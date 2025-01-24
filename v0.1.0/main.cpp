@@ -3,8 +3,8 @@
 #include <string>
 #include <array>
 #include <sstream>
-#include <CLI11.hpp>
 #include <bitset>
+#include <CLI11.hpp>
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
