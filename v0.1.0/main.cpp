@@ -4,7 +4,7 @@
 #include <array>
 #include <sstream>
 #include <bitset>
-#include <CLI11.hpp>
+#include <CLI.hpp>
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
@@ -133,34 +133,34 @@ int main(int argc, char** argv){
 
     if(showHelp){
         std::cout << app.help() << "\n";
-        }
+    }
 
-        if(calcSNM){
-            std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
-        }
+    if(calcSNM){
+        std::cout << "IP: " << ipAddr << subnet << "\n";
+        std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
+    }
 
-        if(calcNet){
-            std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
-        }
+    if(calcNet){
+        std::cout << "IP: " << ipAddr << subnet << "\n";
+        std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
+    }
 
-        if(calcRange){
-            std::cout << "IP: " << ipAddr << subnet << "\n";
+    if(calcRange){
+        std::cout << "IP: " << ipAddr << subnet << "\n";
             std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin / ~subnetBin) << "\n";
-        }
+    }
 
-        if(calcAddressable){
-            std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin) + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
-        }
+    if(calcAddressable){
+        std::cout << "IP: " << ipAddr << subnet << "\n";
+        std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin) + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+    }
 
-        if(calcBroadcast){
-            std::cout << "IP: " << ipAddr << subnet << "\n";
-            std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
-        }
+    if(calcBroadcast){
+        std::cout << "IP: " << ipAddr << subnet << "\n";
+        std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
+    }
 
-        if(identType){
+    if(identType){
         std::string networkType = ipIdent(ipAddr);
         std::cout << "IP: " << ipAddr << subnet << '\n';
         std::cout << "Address type: " << networkType << "\n";
