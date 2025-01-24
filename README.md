@@ -39,3 +39,6 @@ Flags are only allowed behind the IP address except for:
 - `--broacast`, `--net`
 
 Note: only long (--) flags are allowed both in front of the address or bhind it. Short (-) flags are only allowed behind the IP address.
+
+# Contributing
+If you're considering contributing to netcalc, please see [CONTRIBUTING.md](https://github.com/TheSkyler-Dev/netcalc/CONTRIBUTING.md) for instructions and standards for contributing to this project. Thank you for contributing!
