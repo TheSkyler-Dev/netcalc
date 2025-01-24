@@ -141,24 +141,28 @@ int main(int argc, char** argv){
         }
 
         if(calcNet){
-
+            std::cout << "IP: " << ipAddr << subnet << "\n";
+            std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
         }
 
         if(calcRange){
-
+            std::cout << "IP: " << ipAddr << subnet << "\n";
+            std::cout << "Netwok Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIp(ipBin / ~subnetBin) << "\n";
         }
 
         if(calcAddressable){
-
+            std::cout << "IP: " << ipAddr << subnet << "\n";
+            std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin) + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
         }
 
         if(calcBroadcast){
-
+            std::cout << "IP: " << ipAddr << subnet << "\n";
+            std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
         }
 
         if(identType){
         std::string networkType = ipIdent(ipAddr);
-        std::cout << "IP: " << ipAddr << '\n';
+        std::cout << "IP: " << ipAddr << subnet << '\n';
         std::cout << "Address type: " << networkType << "\n";
     }
 
