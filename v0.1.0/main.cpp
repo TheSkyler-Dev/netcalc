@@ -94,9 +94,9 @@ int main(int argc, char** argv){
     bool calcAll = false, calcBroadcast = false, calcRange = false, calcNet = false, calcAddressable = false, calcCIDR = false, calcSNM = false;
 
     app.add_flag("-A, --all", calcAll, "Calculate all network characteristics");
-    app.add_flag("-b, --broadcast", calcBroadcast, "Calculate only the broadcast address");
+    app.add_flag("-b", calcBroadcast, "Calculate only the broadcast address");
     app.add_flag("-r, --range", calcRange, "Calculate the full network range");
-    app.add_flag("-n, --net", calcNet, "Calculate network address");
+    app.add_flag("-n", calcNet, "Calculate network address");
     app.add_flag("-a, --addressable", calcAddressable, "Calculate adddressable host range only");
     app.add_flag("-s, --snm", calcSNM, "Calculate subnet mask");
 
