@@ -163,4 +163,4 @@ int main(int argc, char** argv){
         std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
     };
     return 0;
-} //179 lines of C++
+} //166 lines of C++
