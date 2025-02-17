@@ -40,6 +40,11 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     return res.str();
 }
 
+//Function to calculate number of addressable hosts
+int calcAddressableHosts(const std::bitset<32>& subnetBin){
+    int prefixLength = subnetBin.count();
+    return (1 << (32 - prefixLength)) - 2;
+}
 // Define IP ranges
 const std::array<std::pair<uint32_t, uint32_t>, 3> PRIVATE_RANGES = {{
     {ipToBits("10.0.0.0").to_ulong(), ipToBits("10.255.255.255").to_ulong()},
@@ -113,7 +118,7 @@ int main(int argc, char** argv){
     };
 
     if(!ipAddr.empty() && !subnet.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable || calcCIDR)){
-        std::cout << "Calculating requested network characteristics for: " << ipAddr << "n";
+        std::cout << "Calculating requested network characteristics for: " << ipAddr << "\n";
     } else if(ipAddr.empty() && subnet.empty()){
         std::cerr << "Error: Short flags (-A, -b, -e, etc.) may only appear behind the IP Address.\n";
         return 1;
@@ -160,6 +165,7 @@ int main(int argc, char** argv){
         std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
         std::cout << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
         std::cout << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin).to_ulong() + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
+        std::cout << "Number of Addressable Hosts: " << calcAddressableHosts(subnetBin) << "\n";
         std::cout << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n";
     };
     return 0;
