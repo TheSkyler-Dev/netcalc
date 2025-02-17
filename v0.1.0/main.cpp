@@ -87,31 +87,28 @@ int main(int argc, char** argv){
     std::string ipAddr = "default";
     app.add_option("ip", ipAddr, "IP Address")->check(CLI::ValidIPV4)->required();
     std::string subnet = "/def";
-    app.add_option("sn", subnet, "CIDR subnet identifier")->required();
+    app.add_option("--sn", subnet, "CIDR subnet identifier")->required();
 
     //flags behind IP address
     //initialise all
     bool calcAll = false, calcBroadcast = false, calcRange = false, calcNet = false, calcAddressable = false, calcCIDR = false, calcSNM = false;
 
     app.add_flag("-A, --all", calcAll, "Calculate all network characteristics");
-    app.add_flag("-b, --broadcast", calcBroadcast, "Calculate only the broadcast address");
+    app.add_flag("-b", calcBroadcast, "Calculate only the broadcast address");
     app.add_flag("-r, --range", calcRange, "Calculate the full network range");
-    app.add_flag("-n, --net", calcNet, "Calculate network address");
+    app.add_flag("-n", calcNet, "Calculate network address");
     app.add_flag("-a, --addressable", calcAddressable, "Calculate adddressable host range only");
     app.add_flag("-s, --snm", calcSNM, "Calculate subnet mask");
 
     bool identType = false;
     app.add_flag("-i, --ident", identType, "Identify network type");
 
-    bool showHelp = false;
-    app.add_flag("-h, --help", showHelp, "Display help/list valid flags and usage");
-
     CLI11_PARSE(app, argc, argv);
 
     if(!calcBasis.empty() && !ipAddr.empty()){
         std::cout << "Using basis: " << calcBasis << " for IP: " << ipAddr << "\n";
     } else if(!calcBasis.empty()){
-        std::cerr << "Error: Disallowed option, only --broadcast, --net and --cidr are allowed before the IP address.\n";
+        std::cerr << "Error: Disallowed option, only --broadcast and --net are allowed before the IP address.\n";
         return 1;
     };
 
@@ -124,10 +121,6 @@ int main(int argc, char** argv){
 
     std::bitset<32> ipBin = ipToBits(ipAddr);
     std::bitset<32> subnetBin = subnetToBits(subnet);
-
-    if(showHelp){
-        std::cout << app.help() << "\n";
-    }
 
     if(calcSNM){
         std::cout << "IP: " << ipAddr << subnet << "\n";
@@ -162,7 +155,7 @@ int main(int argc, char** argv){
 
     if(calcAll){
         std::cout << "IP: " << ipAddr << subnet << "\n";
-        std::cout << "Address type:" << ipIdent(ipAddr) << "\n";
+        std::cout << "Address type: " << ipIdent(ipAddr) << "\n";
         std::cout << "Subnet Mask: " << bitsToIP(subnetBin) << "\n";
         std::cout << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n";
         std::cout << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n";
