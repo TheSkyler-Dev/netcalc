@@ -2,7 +2,7 @@
 
 
 ![Static Badge](https://img.shields.io/badge/License-GNU_GPL--v3.0-blue?style=flat&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html%23license-text)
-![Static Badge](https://img.shields.io/badge/Status-broken%2C_in_development-red)
+![Static Badge](https://img.shields.io/badge/Status-v0.1.0_working-green?style=flat)
 ![Static Badge](https://img.shields.io/badge/Codebase-available-green?style=flat)
 
 
@@ -24,12 +24,17 @@ Compatible with any terminal (shell, bash, pwsh, Zsh)
 
 Main: `netcalc`
 
+Example usage (all platforms): 
+```powershell
+netcalc 192.168.10.50 --sn /24 -A
+```
+Important: Do not forget to use the `--sn` flag between the IP address and the CIDR subnet mask! Otherwise it won't work!
 ## Flags
 
 - `-A` or `--All`: calculate all network characteristics
-- `-b` or `--broadcast`: only calculate broadcast address
+- `-b`: only calculate broadcast address
 - `-r` or `--range`: calculate network range (addressable hosts + broadcast and network)
-- `-n` or  `--net`: calculate network address
+- `-n`: calculate network address
 - `-a` or  `--addressable`: calculate addressabe host range only
 - `-i` or `--ident`: identify network type
 - `-s` or `--snm`: calculate subnet mask
