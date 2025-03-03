@@ -25,6 +25,18 @@ if(NOT TARGET CLI11::CLI11)
   message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
 endif()
 
+#fetching fmt
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 11.1.4
+)
+FetchContent_MakeAvailable(fmt)
+
+if(NOT TARGET fmt::fmt)
+  message(FATAL_ERROR "fmt library was not successfully fetched and made available.")
+endif()
+
 # Copy CLI11 headers to the project's include directory
 add_custom_target(copy_cli11_headers ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -48,7 +60,7 @@ target_precompile_headers(netcalc PRIVATE
 )
 
 # Link the CLI11 library to the netcalc target
-target_link_libraries(netcalc PRIVATE CLI11::CLI11)
+target_link_libraries(netcalc PRIVATE CLI11::CLI11 fmt::fmt)
 
 # Ensure the include directories are set correctly
 target_include_directories(netcalc PRIVATE ${PROJECT_SOURCE_DIR}/include)
