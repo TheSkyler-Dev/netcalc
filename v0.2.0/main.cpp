@@ -6,7 +6,7 @@
 #include <array>
 #include <sstream>
 #include <bitset>
-#include <CLI/CLI.hpp> // Correct header for CLI11
+#include <CLI/CLI.hpp>
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
@@ -159,4 +159,4 @@ int main(int argc, char** argv){
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Broadcast Address: {}\n", bitsToIP(ipBin | ~subnetBin));
     };
     return 0;
-} //174 lines of C++
+} //162 lines of C++
