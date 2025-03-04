@@ -16,7 +16,7 @@ Compatible with any terminal that supports ANSI escape codes (shell, bash, pwsh,
 
 ## Dependencies 
 - [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils) (CMakeLists is set up to fetch this dependency on build time)
-- [fmt](https://github.com/fmtlib/fmt) by [fmtlib](https://github.com/fmtlib) (CMakeLists is set up to fetch this dependency on build time)
+- (since v0.2.0) [fmt](https://github.com/fmtlib/fmt) by [fmtlib](https://github.com/fmtlib) (CMakeLists is set up to fetch this dependency on build time)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
 - CMake 3.16.0 or later
