@@ -10,6 +10,8 @@ Netcalc (`netcalc`) is a simple command line utility program to calculate IPv4 n
 
 # Compatibility
 Compatible with any terminal that supports ANSI escape codes (shell, bash, pwsh, Zsh)
+
+For Windows native PowerShell, you may need to enable ANSI escape code support.
 ## Features
 - calculate all network characteristics from any IP address
 - identify network type, error when given APIPA address
