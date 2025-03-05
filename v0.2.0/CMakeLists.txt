@@ -76,3 +76,59 @@ install(TARGETS netcalc DESTINATION bin)
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
+
+# CPack configuration
+include(CPack)
+include(InstallRequiredSystemLibraries)
+
+# Set package metadata
+set(CPACK_PACKAGE_NAME "netcalc")
+set(CPACK_PACKAGE_VENDOR "TheSkyler-Dev")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A network calculator utility")
+set(CPACK_PACKAGE_DESCRIPTION "netcalc is a command-line utility for performing various network calculations such as subnet analysis, IP conversions, and more.")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "netcalc")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_CONTACT "TheSkyler-Dev")
+
+# RPM specific settings
+set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
+set(CPACK_RPM_PACKAGE_GROUP "Applications/Networking")
+set(CPACK_RPM_PACKAGE_REQUIRES "glibc, libstdc++")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
+
+# Windows NSIS specific settings
+set(CPACK_NSIS_DISPLAY_NAME "Network Calculator")
+set(CPACK_NSIS_PACKAGE_NAME "NetCalc")
+set(CPACK_NSIS_HELP_LINK "https://github.com/TheSkyler-Dev/netcalc")
+set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/TheSkyler-Dev/netcalc")
+set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
+set(CPACK_NSIS_MODIFY_PATH ON)
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
+
+# Create desktop shortcut
+set(CPACK_NSIS_CREATE_ICONS_EXTRA
+    "CreateShortCut '$DESKTOP\\\\Network Calculator.lnk' '$INSTDIR\\\\bin\\\\netcalc.exe'")
+set(CPACK_NSIS_DELETE_ICONS_EXTRA
+    "Delete '$DESKTOP\\\\Network Calculator.lnk'")
+
+# Platform-specific generator selection
+if(WIN32)
+set(CPACK_GENERATOR "NSIS")
+else()
+set(CPACK_GENERATOR "RPM")
+endif()
+
+# Enable WiX generator as alternative for Windows
+if(WIN32)
+list(APPEND CPACK_GENERATOR "WIX") 
+set(CPACK_WIX_UPGRADE_GUID "8CF6A9DB-6B5E-4FD0-AC85-5962D7D45EF1")
+set(CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
+set(CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_banner.png")
+set(CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_dialog.png")
+endif()
