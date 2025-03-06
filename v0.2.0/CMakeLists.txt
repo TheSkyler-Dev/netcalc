@@ -25,12 +25,28 @@ if(NOT TARGET CLI11::CLI11)
   message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
 endif()
 
-#fetching fmt
+# Fetching fmt
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 11.1.4
 )
+
+FetchContent_GetProperties(fmt)
+if(NOT fmt_POPULATED)
+  FetchContent_Populate(fmt)
+  
+  # Patch the fmt CMakeLists.txt to use underscore instead of dash
+  file(READ "${fmt_SOURCE_DIR}/CMakeLists.txt" fmt_cmake_content)
+  string(REPLACE "COMPONENT fmt-core" "COMPONENT fmt_core" fmt_cmake_content_patched "${fmt_cmake_content}")
+  file(WRITE "${fmt_SOURCE_DIR}/CMakeLists.txt" "${fmt_cmake_content_patched}")
+  
+  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
+endif()
+
+# Then update the display name
+set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
+
 FetchContent_MakeAvailable(fmt)
 
 if(NOT TARGET fmt::fmt)
@@ -77,6 +93,10 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
 
+# Set component display name mapping to keep original name in display
+set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
+set(CPACK_COMPONENT_FMT_CORE_DESCRIPTION "The fmt C++ formatting library")
+
 # CPack configuration
 include(CPack)
 include(InstallRequiredSystemLibraries)
@@ -102,20 +122,12 @@ set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
 
 # Windows NSIS specific settings
 set(CPACK_NSIS_DISPLAY_NAME "Network Calculator")
-set(CPACK_NSIS_PACKAGE_NAME "NetCalc")
+set(CPACK_NSIS_PACKAGE_NAME "netcalc")
 set(CPACK_NSIS_HELP_LINK "https://github.com/TheSkyler-Dev/netcalc")
 set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/TheSkyler-Dev/netcalc")
 set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
 set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-
-# Create desktop shortcut
-set(CPACK_NSIS_CREATE_ICONS_EXTRA
-    "CreateShortCut '$DESKTOP\\\\Network Calculator.lnk' '$INSTDIR\\\\bin\\\\netcalc.exe'")
-set(CPACK_NSIS_DELETE_ICONS_EXTRA
-    "Delete '$DESKTOP\\\\Network Calculator.lnk'")
 
 # Platform-specific generator selection
 if(WIN32)
@@ -128,7 +140,5 @@ endif()
 if(WIN32)
 list(APPEND CPACK_GENERATOR "WIX") 
 set(CPACK_WIX_UPGRADE_GUID "8CF6A9DB-6B5E-4FD0-AC85-5962D7D45EF1")
-set(CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-set(CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_banner.png")
-set(CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_dialog.png")
+
 endif()
