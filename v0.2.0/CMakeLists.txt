@@ -25,7 +25,7 @@ if(NOT TARGET CLI11::CLI11)
   message(FATAL_ERROR "CLI11 library was not successfully fetched and made available.")
 endif()
 
-#fetching fmt
+# Fetching fmt
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
@@ -102,20 +102,12 @@ set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
 
 # Windows NSIS specific settings
 set(CPACK_NSIS_DISPLAY_NAME "Network Calculator")
-set(CPACK_NSIS_PACKAGE_NAME "NetCalc")
+set(CPACK_NSIS_PACKAGE_NAME "netcalc")
 set(CPACK_NSIS_HELP_LINK "https://github.com/TheSkyler-Dev/netcalc")
 set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/TheSkyler-Dev/netcalc")
 set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
 set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-
-# Create desktop shortcut
-set(CPACK_NSIS_CREATE_ICONS_EXTRA
-    "CreateShortCut '$DESKTOP\\\\Network Calculator.lnk' '$INSTDIR\\\\bin\\\\netcalc.exe'")
-set(CPACK_NSIS_DELETE_ICONS_EXTRA
-    "Delete '$DESKTOP\\\\Network Calculator.lnk'")
 
 # Platform-specific generator selection
 if(WIN32)
@@ -128,7 +120,5 @@ endif()
 if(WIN32)
 list(APPEND CPACK_GENERATOR "WIX") 
 set(CPACK_WIX_UPGRADE_GUID "8CF6A9DB-6B5E-4FD0-AC85-5962D7D45EF1")
-set(CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/resources/netcalc.ico")
-set(CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_banner.png")
-set(CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/resources/wix_dialog.png")
+
 endif()
