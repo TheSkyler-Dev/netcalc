@@ -31,6 +31,22 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 11.1.4
 )
+
+FetchContent_GetProperties(fmt)
+if(NOT fmt_POPULATED)
+  FetchContent_Populate(fmt)
+  
+  # Patch the fmt CMakeLists.txt to use underscore instead of dash
+  file(READ "${fmt_SOURCE_DIR}/CMakeLists.txt" fmt_cmake_content)
+  string(REPLACE "COMPONENT fmt-core" "COMPONENT fmt_core" fmt_cmake_content_patched "${fmt_cmake_content}")
+  file(WRITE "${fmt_SOURCE_DIR}/CMakeLists.txt" "${fmt_cmake_content_patched}")
+  
+  add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
+endif()
+
+# Then update the display name
+set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
+
 FetchContent_MakeAvailable(fmt)
 
 if(NOT TARGET fmt::fmt)
@@ -76,6 +92,10 @@ install(TARGETS netcalc DESTINATION bin)
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
+
+# Set component display name mapping to keep original name in display
+set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
+set(CPACK_COMPONENT_FMT_CORE_DESCRIPTION "The fmt C++ formatting library")
 
 # CPack configuration
 include(CPack)
