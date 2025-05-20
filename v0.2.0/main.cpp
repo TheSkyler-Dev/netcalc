@@ -171,4 +171,4 @@ int main(int argc, char** argv){
         std::cout << FG_WHITE << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
     }
     return 0;
-} //162 lines of C++
+} //174 lines of C++
