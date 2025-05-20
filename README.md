@@ -18,10 +18,19 @@ For Windows native PowerShell, you may need to enable ANSI escape code support.
 
 ## Dependencies 
 - [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils) (CMakeLists is set up to fetch this dependency on build time)
-- (since v0.2.0) [fmt](https://github.com/fmtlib/fmt) by [fmtlib](https://github.com/fmtlib) (CMakeLists is set up to fetch this dependency on build time)
+- (for v0.2.0) [fmt](https://github.com/fmtlib/fmt) by [fmtlib](https://github.com/fmtlib) (CMakeLists is set up to fetch this dependency on build time)
 - bitset (std)
 - a C++ 17-compatible compiler (gcc/g++, clang, MSVC etc.)
 - CMake 3.16.0 or later
+
+### ⚠️ Note: Cependency changes due to changes in the source code
+Starting with `netcalc` 0.3.0, more recent C++ features will be used, prompting a change to the `CMakeLIsts.txt` in the [v0.3.0](https://github.com/TheSkyler-Dev/netcalc/tree/main/v0.3.0) directory. These changes are:
+- ~CMake 3.16.0 or later~ **CMake 3.25.0 or later**
+- ~a C++ 17-compatible compiler~ **a C++ 23-compatible compiler (see [Compiler Support for C++ 23](https://en.cppreference.com/w/cpp/compiler_support/23) for compatible compilers)**
+- ~[fmt](https://github.com/fmtlib/fmt) by [fmtlib](https://github.com/fmtlib)~ **This dependency has been removed with `netcalc` 0.3.0.**
+
+#### What features prompted this change?
+These changes are due to the use of the standard `<print>` library from version 0.3.0 forward. That allows for a more maintainable and less verbose source code, also allowing for string interpolation and less verbose text formatting.
 
 # Commands
 
