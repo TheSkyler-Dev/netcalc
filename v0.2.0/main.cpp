@@ -1,12 +1,27 @@
 // Netcalc (c) 2025 TheSkyler-Dev Licensed under GNU GPL-v3.0
 #include <iostream>
-#include <fmt/core.h>
-#include <fmt/color.h>
+#include <print>
 #include <string>
 #include <array>
 #include <sstream>
 #include <bitset>
 #include <CLI/CLI.hpp>
+
+//color constants for colored text
+//foreground colors
+const std::string FG_RESET   =  "\033[0m";
+const std::string FG_RED     =  "\033[31m";
+const std::string FG_GREEN   =  "\033[32m";
+const std::string FG_BLUE    =  "\033[34m";
+const std::string FG_YELLOW  =  "\033[33m";
+const std::string FG_CYAN    =  "\033[36m";
+const std::string FG_MAGENTA =  "\033[35m";
+const std::string FG_WHITE   =  "\033[37m";
+const std::string FG_BLACK   =  "\033[30m";
+
+//text formatting
+const std::string BOLD       = "\033[1m";
+const std::string BOLD_RESET = "\033[21m";
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
@@ -99,7 +114,7 @@ int main(int argc, char** argv){
     app.add_flag("-b", calcBroadcast, "Calculate only the broadcast address");
     app.add_flag("-r", calcRange, "Calculate the full network range");
     app.add_flag("-n", calcNet, "Calculate network address");
-    app.add_flag("-a", calcAddressable, "Calculate adddressable host range only");
+    app.add_flag("-a", calcAddressable, "Calculate addressable host range only");
     app.add_flag("-s", calcSNM, "Calculate subnet mask");
 
     bool identType = false;
@@ -108,9 +123,9 @@ int main(int argc, char** argv){
     CLI11_PARSE(app, argc, argv);
 
     if(!ipAddr.empty() && !subnet.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable || calcCIDR)){
-        std::cout << "Calculating requested network characteristics for: " << ipAddr << "\n";
+        std::print("Calculating requested network characteristics for: {}.\n", ipAddr);
     } else if(ipAddr.empty() && subnet.empty()){
-        fmt::print(stderr, fmt::fg(fmt::color::crimson), "Error: Short flags (-A, -b, -e, etc.) may only be used behind the IP Address. \n");
+        std::print(FG_RED, stderr, "Error: Short flags (-A, -b, -e, etc.) may only be used behind the IP Address.\n", FG_RESET);
         return 1;
     };
 
@@ -118,17 +133,17 @@ int main(int argc, char** argv){
     std::bitset<32> subnetBin = subnetToBits(subnet);
 
     if(calcSNM){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Subnet Mask: {}\n", bitsToIP(subnetBin));
+        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
+        std::print(FG_BLUE, "Subnet Mask: {}\n", bitsToIP(subnetBin), FG_RESET);
     }
 
     if(calcNet){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Address: {}\n", bitsToIP(ipBin & subnetBin));
+        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
+        std::print(FG_BLUE, "Network Address: {}\n", bitsToIP(ipBin & subnetBin));
     }
 
     if(calcRange){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
+        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Range: {} - {}\n", bitsToIP(ipBin & subnetBin), bitsToIP(ipBin | ~subnetBin));
     }
 
