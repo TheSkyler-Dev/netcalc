@@ -1,27 +1,24 @@
 // Netcalc (c) 2025 TheSkyler-Dev Licensed under GNU GPL-v3.0
+// Requires C++20 or later for <format> header
 #include <iostream>
-#include <print>
+#include <cstdint>  // For uint32_t
 #include <string>
 #include <array>
 #include <sstream>
 #include <bitset>
 #include <CLI/CLI.hpp>
 
-//color constants for colored text
-//foreground colors
-const std::string FG_RESET   =  "\033[0m";
-const std::string FG_RED     =  "\033[31m";
-const std::string FG_GREEN   =  "\033[32m";
-const std::string FG_BLUE    =  "\033[34m";
-const std::string FG_YELLOW  =  "\033[33m";
-const std::string FG_CYAN    =  "\033[36m";
-const std::string FG_MAGENTA =  "\033[35m";
-const std::string FG_WHITE   =  "\033[37m";
-const std::string FG_BLACK   =  "\033[30m";
-
-//text formatting
+// ANSI escape codes for formatting
+const std::string RESET      = "\033[0m";
+const std::string FG_BLACK   = "\033[30m";
+const std::string FG_RED     = "\033[31m";
+const std::string FG_GREEN   = "\033[32m";
+const std::string FG_YELLOW  = "\033[33m";
+const std::string FG_BLUE    = "\033[34m";
+const std::string FG_MAGENTA = "\033[35m";
+const std::string FG_CYAN    = "\033[36m";
+const std::string FG_WHITE   = "\033[37m";
 const std::string BOLD       = "\033[1m";
-const std::string BOLD_RESET = "\033[21m";
 
 //helper function: IP to Binary notation
 // Converts an IPv4 address from string format to a 32-bit binary representation
@@ -57,7 +54,7 @@ std::string bitsToIP(const std::bitset<32>& ipBin){
     return res.str();
 }
 
-//Function to calculate number of addressable hosts
+//Function to calculate the number of addressable hosts
 int calcAddressableHosts(const std::bitset<32>& subnetBin){
     int prefixLength = subnetBin.count();
     return (1 << (32 - prefixLength)) - 2;
@@ -78,7 +75,7 @@ bool isInRange(uint32_t ip, const std::pair<uint32_t, uint32_t>& range) {
     return ip >= range.first && ip <= range.second;
 }
 
-// Function to identify network type
+// Function to identify the network type
 std::string ipIdent(const std::string& ipAddr) {
     uint32_t ipInt = ipToBits(ipAddr).to_ulong();
 
@@ -107,8 +104,8 @@ int main(int argc, char** argv){
     app.add_option("--sn", subnet, "CIDR subnet identifier")->required();
 
     //flags behind IP address
-    //initialise all
-    bool calcAll = false, calcBroadcast = false, calcRange = false, calcNet = false, calcAddressable = false, calcCIDR = false, calcSNM = false;
+    //initialize all
+    bool calcAll = false, calcBroadcast = false, calcRange = false, calcNet = false, calcAddressable = false, calcSNM = false;
 
     app.add_flag("-A", calcAll, "Calculate all network characteristics");
     app.add_flag("-b", calcBroadcast, "Calculate only the broadcast address");
@@ -122,56 +119,56 @@ int main(int argc, char** argv){
 
     CLI11_PARSE(app, argc, argv);
 
-    if(!ipAddr.empty() && !subnet.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable || calcCIDR)){
-        std::print("Calculating requested network characteristics for: {}.\n", ipAddr);
+    if(!ipAddr.empty() && !subnet.empty() && (calcAll || calcBroadcast || calcRange || calcNet || calcAddressable)){
+        std::cout <<"Calculating requested network characteristics for: " << ipAddr << "\n" << RESET;
     } else if(ipAddr.empty() && subnet.empty()){
-        std::print(FG_RED, stderr, "Error: Short flags (-A, -b, -e, etc.) may only be used behind the IP Address.\n", FG_RESET);
-        return 1;
-    };
+        std::cout << FG_RED << BOLD << stderr << "Error: Short flags are disallowed before the IP address.\n" << RESET;
+    }
 
     std::bitset<32> ipBin = ipToBits(ipAddr);
     std::bitset<32> subnetBin = subnetToBits(subnet);
 
     if(calcSNM){
-        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
-        std::print(FG_BLUE, "Subnet Mask: {}\n", bitsToIP(subnetBin), FG_RESET);
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Subnet Mask: " << bitsToIP(subnetBin) << "\n" << RESET;
     }
 
     if(calcNet){
-        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
-        std::print(FG_BLUE, "Network Address: {}\n", bitsToIP(ipBin & subnetBin));
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n" << RESET;
     }
 
     if(calcRange){
-        std::print(FG_CYAN, BOLD, "IP: {}{}\n", ipAddr, subnet, FG_RESET, BOLD_RESET);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Range: {} - {}\n", bitsToIP(ipBin & subnetBin), bitsToIP(ipBin | ~subnetBin));
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
     }
 
     if(calcAddressable){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin));
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin).to_ulong() + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
     }
 
     if(calcBroadcast){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Broadcast Address: {}\n", bitsToIP(ipBin | ~subnetBin));
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
     }
 
     if(identType){
         std::string networkType = ipIdent(ipAddr);
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Address type: {}\n", networkType);
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::cout << FG_WHITE << "Address type: " << networkType << "\n" << RESET;
     }
 
     if(calcAll){
-        fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Address type: {}\n", ipIdent(ipAddr));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Subnet Mask: {}\n", bitsToIP(subnetBin));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Address: {}\n", bitsToIP(ipBin & subnetBin));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Range: {} - {}\n", bitsToIP(ipBin & subnetBin), bitsToIP(ipBin | ~subnetBin));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Number of Addressable Hosts: {}\n", calcAddressableHosts(subnetBin));
-        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Broadcast Address: {}\n", bitsToIP(ipBin | ~subnetBin));
-    };
+        std::cout << FG_CYAN << BOLD << "IP: " << ipAddr << subnet << "\n" << RESET;
+        std::string networkType = ipIdent(ipAddr);
+        std::cout << FG_WHITE << "Address type: " << networkType << "\n" << RESET;
+        std::cout << FG_WHITE << "Subnet Mask: " << bitsToIP(subnetBin) << "\n" << RESET;
+        std::cout << FG_WHITE << "Network Address: " << bitsToIP(ipBin & subnetBin) << "\n" << RESET;
+        std::cout << FG_WHITE << "Network Range: " << bitsToIP(ipBin & subnetBin) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
+        std::cout << FG_WHITE << "Addressable Host Range: " << bitsToIP((ipBin & subnetBin).to_ulong() + 1) << " - " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
+        std::cout << FG_BLUE << "Number of Addressable Hosts: " << calcAddressableHosts(subnetBin) << "\n" << RESET;
+        std::cout << FG_WHITE << "Broadcast Address: " << bitsToIP(ipBin | ~subnetBin) << "\n" << RESET;
+    }
     return 0;
 } //162 lines of C++

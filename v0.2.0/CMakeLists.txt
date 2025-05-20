@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(netcalc VERSION 0.2.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -18,6 +18,8 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
   GIT_TAG v2.4.2
 )
+
+# Make CLI11 available
 FetchContent_MakeAvailable(CLI11)
 
 # Ensure CLI11 is available
@@ -43,12 +45,12 @@ add_dependencies(netcalc copy_cli11_headers)
 
 target_precompile_headers(netcalc PRIVATE
     <iostream>
-    <print>
     <string>
     <bitset>
+    <cstdint>
 )
 
-# Link the CLI11 library to the netcalc target
+# Link the CLI11 library and fmt library to the netcalc target
 target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
 # Ensure the include directories are set correctly
@@ -65,6 +67,7 @@ install(TARGETS netcalc DESTINATION bin)
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
+message(STATUS "Using {fmt} library for formatting")
 
 # Set component display name mapping to keep original name in display
 set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
