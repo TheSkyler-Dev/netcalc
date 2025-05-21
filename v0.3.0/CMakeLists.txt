@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.25.0)
 
-project(netcalc VERSION 0.2.0 LANGUAGES CXX)
+project(netcalc VERSION 0.3.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -39,6 +39,9 @@ set(SOURCES
 )
 
 add_executable(netcalc ${SOURCES})
+set_target_properties(netcalc PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
 
 # Ensure the headers are copied before building the target
 add_dependencies(netcalc copy_cli11_headers)
@@ -50,7 +53,7 @@ target_precompile_headers(netcalc PRIVATE
     <cstdint>
 )
 
-# Link the CLI11 library and fmt library to the netcalc target
+# Link the CLI11 library library to the netcalc target
 target_link_libraries(netcalc PRIVATE CLI11::CLI11)
 
 # Ensure the include directories are set correctly
@@ -62,16 +65,18 @@ else()
   target_compile_options(netcalc PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(netcalc PRIVATE -fexperimental-library)
+    target_link_options(netcalc PRIVATE -fexperimental-library)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    target_compile_options(netcalc PRIVATE -fmodules-ts)
+endif()
+
 install(TARGETS netcalc DESTINATION bin)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "CLI11 include directory: ${PROJECT_SOURCE_DIR}/include")
-message(STATUS "Using {fmt} library for formatting")
-
-# Set component display name mapping to keep original name in display
-set(CPACK_COMPONENT_FMT_CORE_DISPLAY_NAME "fmt-core")
-set(CPACK_COMPONENT_FMT_CORE_DESCRIPTION "The fmt C++ formatting library")
 
 # CPack configuration
 include(CPack)
@@ -119,4 +124,8 @@ if(WIN32)
 list(APPEND CPACK_GENERATOR "WIX") 
 set(CPACK_WIX_UPGRADE_GUID "8CF6A9DB-6B5E-4FD0-AC85-5962D7D45EF1")
 
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_link_libraries(netcalc PRIVATE stdc++)
 endif()
