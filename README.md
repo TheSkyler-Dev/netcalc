@@ -3,10 +3,10 @@
 
 ![Static Badge](https://img.shields.io/badge/License-GNU_GPL--v3.0-blue?style=flat&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html%23license-text)
 ![Static Badge](https://img.shields.io/badge/Status-v0.2.0_working-green?style=flat)
-![Static Badge](https://img.shields.io/badge/Codebase-available-green?style=flat)
+![Static Badge](https://img.shields.io/badge/Next_version-in_development-orange?style=flat)
 
 
-Netcalc (`netcalc`) is a simple command line utility program to calculate IPv4 network characteristics.
+Netcalc (`netcalc`) - a safe, fast command line utility program to calculate IPv4/IPv6 network characteristics without touching any system or networ configurations.
 
 # Compatibility
 Compatible with any terminal that supports ANSI escape codes (shell, bash, pwsh, Zsh)
@@ -115,5 +115,40 @@ Important: Do not forget to use the `--sn` flag between the IP address and the C
 - `-s`: calculate subnet mask
 - `-h`: display help/list valid flags and usage
 
+**Example usage:**
+Example 1
+```bash
+netcalc 192.168.10.50 --sn /24 -A
+```
+```bash
+Calculating requested network characteristics for: 192.168.10.50
+IP: 192.168.10.50/24
+Address type: Private
+Subnet Mask: 255.255.255.0
+Network Address: 192.168.10.0
+Network Range: 192.168.10.0 - 192.168.10.255
+Addressable Host Range: 192.168.10.1 - 192.168.10.254
+Number of Addressable Hosts: 254
+Broadcast Address: 192.168.10.255
+```
+---
+Example 2
+```bash
+netcalc 10.0.0.0 --sn /8 -r
+```
+```bash
+Calculating requested network characteristics for: 10.0.0.0
+IP: 10.0.0.0/8
+Network Range: 10.0.0.0 - 10.255.255.255
+```
+---
+Example 3
+```bash
+netcalc 172.16.5.100 --sn /20 -i
+```
+```bash
+IP: 172.16.5.100/20
+Address type: Private
+```
 # Contributing
 If you're considering contributing to netcalc, please see [CONTRIBUTING.md](https://github.com/TheSkyler-Dev/netcalc/blob/main/CONTRIBUTING.md) for instructions and standards for contributing to this project. Thank you for contributing!
