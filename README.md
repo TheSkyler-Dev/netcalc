@@ -116,12 +116,10 @@ Important: Do not forget to use the `--sn` flag between the IP address and the C
 - `-h`: display help/list valid flags and usage
 
 **Example usage:**
-
-Input:
+Example 1
 ```bash
 netcalc 192.168.10.50 --sn /24 -A
 ```
-Output:
 ```bash
 Calculating requested network characteristics for: 192.168.10.50
 IP: 192.168.10.50/24
@@ -133,6 +131,24 @@ Addressable Host Range: 192.168.10.1 - 192.168.10.254
 Number of Addressable Hosts: 254
 Broadcast Address: 192.168.10.255
 ```
-
+---
+Example 2
+```bash
+netcalc 10.0.0.0 --sn /8 -r
+```
+```bash
+Calculating requested network characteristics for: 10.0.0.0
+IP: 10.0.0.0/8
+Network Range: 10.0.0.0 - 10.255.255.255
+```
+---
+Example 3
+```bash
+netcalc 172.16.5.100 --sn /20 -i
+```
+```bash
+IP: 172.16.5.100/20
+Address type: Private
+```
 # Contributing
 If you're considering contributing to netcalc, please see [CONTRIBUTING.md](https://github.com/TheSkyler-Dev/netcalc/blob/main/CONTRIBUTING.md) for instructions and standards for contributing to this project. Thank you for contributing!
