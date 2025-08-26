@@ -32,6 +32,69 @@ Starting with `netcalc` 0.3.0, more recent C++ features will be used, prompting 
 #### What features prompted this change?
 These changes are due to the use of the `std::format` (introduced in C++ 20) from version 0.3.0 forward. That allows for a more maintainable and less verbose source code, also allowing for string interpolation and less verbose text formatting.
 
+# Installation
+## Windows manual install
+1. download `netcalc.exe`
+2. create a `netcalc` directory in the root directory of your C drive and place `netcalc.exe` inside of it
+3. copy the path to ther parent folder of the executable and paste it into your local `PATH` environment variable to install it for your account only. To install globally, add the directory to the global `PATH` variable.
+4. Verify installation:
+```powershell
+netcalc -h
+or
+netcalc --help
+```
+## Debian-based Linux distros
+1. download `netcalc-v0.2.0.deb`
+5. install by double-clicking or use the following command:
+```bash
+cd /path/to/netcalc-v0.2.0.deb
+sudo dpkg -i netcalc-v0.2.0.deb
+```
+Note that the `postinst` script will automatically set the correct permissions to use `netcalc`. Even so, it is good practice to doublecheck with:
+```bash
+ls -l /usr/local/bin
+```
+### `.tar.gz` tarball (manual installation)
+1. Download `netcalc-0.2.0-Linux.tar.gz`
+2. extract the package with
+```bash
+tar -xvzf netcalc-0.2.0-Linux.tar.gz
+```
+4. navigate to the extracted package and find the binary
+```bash
+cd netcalc-0.2.0-Linux/bin
+```
+7. Finally move the binary to `usr/local/bin`
+```bash
+sudo cp netcalc /usr/local/bin
+```
+8. verify installation:
+```bash
+netcalc -h
+or
+netcalc --help
+```
+## Building from Source
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourname/netcalc.git
+   ```
+2. move into the directory for your desired version of `netcalc`
+   ```bash
+   cd netcalc/[your desired version]
+   ```
+3. make a build directory and move into it
+   ```bash
+   mkdir build && cd build
+   ```
+4. Build the project
+   ```bash
+   cmake ..
+   make
+   ```
+### :warning: Note: Installers for `netcalc`
+Installers are still a work in progress and do not work yet (help wanted - see Issue [#19](https://github.com/TheSkyler-Dev/netcalc/issues/19). **It is advised to not download the installers provided in release v0.2.0!** In the meantime, binaries, .deb packages and tarballs are available.
+
 # Commands
 
 Main: `netcalc`
