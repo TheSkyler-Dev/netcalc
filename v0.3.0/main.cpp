@@ -146,7 +146,7 @@ int main(int argc, char** argv){
 
     if(calcAddressable){
         std::cout << std::format("{}{}IP: {}{}{}\n", FG_CYAN, BOLD, ipAddr, subnet, RESET);
-        std::cout << std::format("{}Addressable Host Range: {} - {}{}", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin), RESET);
+        std::cout << std::format("{}Addressable Host Range: {} - {}{}", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin - 1).to_ulong() - 1), RESET);
     }
 
     if(calcBroadcast){
@@ -167,7 +167,7 @@ int main(int argc, char** argv){
         std::cout << std::format("{}Subnet Mask: {}{}\n", FG_WHITE, bitsToIP(subnetBin), RESET);
         std::cout << std::format("{}Network Address: {}{}\n", FG_WHITE, bitsToIP(ipBin & subnetBin), RESET);
         std::cout << std::format("{}Network Range: {} - {}{}\n", FG_WHITE, bitsToIP(ipBin & subnetBin), bitsToIP(ipBin | ~subnetBin), RESET);
-        std::cout << std::format("{}Addressable Host Range: {} - {}{}\n", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin), RESET);
+        std::cout << std::format("{}Addressable Host Range: {} - {}{}\n", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin).to_ulong() - 1), RESET);
         std::cout << std::format("{}Number of Addressable Hosts: {}{}\n", FG_BLUE, calcAddressableHosts(subnetBin), RESET);
         std::cout << std::format("{}Broadcast Address: {}{}\n", FG_WHITE, bitsToIP(ipBin | ~subnetBin), RESET);
     }
