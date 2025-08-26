@@ -1,7 +1,15 @@
-# Contributing to Multiconvert
+# Contributing to Netcalc
 
-Thank you for considering contributing to Multiconvert! We appreciate your time and effort in helping to improve this project.  
+Thank you for considering contributing to Netcalc! We appreciate your time and effort in helping to improve this project.
 Please follow these guidelines to ensure consistency and maintain high code quality.
+
+## 🚀 Quick Start for Contributors
+
+### High Priority Areas (Help Wanted!)
+- **Installers & Packaging** 📦 - We need help with CPack, NSIS, WiX, and MSI installers
+- **Package Manager Support** 📋 - Homebrew, Chocolatey, Scoop, AUR submissions
+- **Cross-platform Testing** 🔄 - Testing builds on different OS/compiler combinations
+- **Documentation** 📖 - Improve user guides and API documentation
 
 ## Getting Started
 
@@ -13,53 +21,116 @@ Please follow these guidelines to ensure consistency and maintain high code qual
 3. **Create a Branch:** Always work in a new branch to keep your changes organized.
    ```bash
    git checkout -b feature-or-bugfix-branch
-    ```
+   ```
+
+## Development Setup
+
+### Prerequisites
+- CMake 3.16+ (3.25+ for v0.3.0)
+- C++17 compiler (C++20 for v0.3.0)
+- Git
+
+### Building
+```bash
+cd netcalc/v0.2.0  # or v0.3.0
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
+
+### Testing Your Build
+```bash
+# Basic functionality test
+./bin/netcalc 192.168.1.100 --sn /24 -A
+
+# Expected output should show network calculations
+```
+
+## 📦 Installer & Packaging Help Needed
+
+We're actively seeking help with:
+
+### Windows Installers
+- **NSIS**: Needs proper configuration and testing
+- **WiX**: MSI installer creation and signing
+- **Chocolatey**: Package creation and submission
+
+### Linux Packages
+- **Debian (.deb)**: Currently working, needs testing
+- **RPM**: Red Hat/Fedora package creation
+- **AUR**: Arch User Repository submission
+- **Snap/Flatpak**: Universal package creation
+
+### macOS
+- **Homebrew**: Formula creation and submission
+- **DMG**: Installer creation for direct distribution
+
+### Package Manager Templates Needed
+See `packaging/` directory for examples and templates.
+
 ## Code Standards
-To maintain code consistency and readability, please adhere to the following guidelines:
 
-1. ### Class Naming Conventions
-   - Use **PascalCase** for class names (e.g., `UnitConverter`, `TemperatureConverter`).
-   - Class names should be descriptive and reflect their purpose.
+### Class Naming Conventions
+- Use **PascalCase** for class names (e.g., `NetworkCalculator`, `IPAddress`)
+- Class names should be descriptive and reflect their purpose
 
-2. ### Code Comments
-   - Provide clear, concise comments explaining complex code sections.
-   - Document all public methods, classes, and modules, including a brief description of each parameter and return value.
-   - Use `//` for single line comments or `/*...*/` for multi-line comments where necessary.
+### Code Comments
+- Provide clear, concise comments explaining complex code sections
+- Document all public methods, classes, and modules
+- Use `//` for single line comments or `/*...*/` for multi-line comments
 
-3. ### Linking Issues
-   - If your contribution resolves an existing issue, **link the issue in your pull request** description.
-   This helps maintain a clear connection between issues and code changes.
-
-4. ### Use of Variables
-   In order to prevent potential undefined behavior, it is good practice to **allways initialize variables with default values**. Default values are expected to convey the kind of value expected by the variable, e.g. `0.0` for floating point or doube floating point varables, `"defaultValue"` for string variables or `0` for integer variables. Uninitialized Variable can cause unpredictable results, undefined behavior and bugs that are hard to diagnose. Make sure all variables have defined values before bein used in expressions or passed to functions.
+### Variable Initialization
+**Always initialize variables with default values** to prevent undefined behavior:
+```cpp
+int count = 0;           // Not: int count;
+std::string name = "";   // Not: std::string name;
+double value = 0.0;      // Not: double value;
+```
 
 ## Pull Request Process
-To ensure the quality of the codebase, all contributions go through a review process. Follow these steps to create a pull request:
 
-1. **Open a Pull Request (PR)**: When you are ready to submit your changes, open a PR against the `main` branch.
-2. **Describe Your Changes**: Include a clear, concise description of the changes in your PR, specifying any enhancements or bug fixes.
-3. **Link to Relevant Issue**: If your PR addresses an existing issue, reference it in the PR description (e.g., "Closes #123").
-4. **review Process**
-   - All PRs will undergo a comprehensive review by project maintainers.
-   - You may be asked to provide further clarification or modifications if needed.
-   - PRs will only be merged once they pass the review and are approved by at least one maintainer.
-5. **Testing**:
-   - Ensure that all tests pass successfully before submitting a PR.
-   - Add new tests if your contribution introduces new features or modifies existing functionality.
+1. **Open a Pull Request (PR)**: Submit against the appropriate version branch
+2. **Describe Your Changes**: Include clear description of enhancements/fixes
+3. **Link Issues**: Reference related issues (e.g., "Closes #123", "Helps with #19")
+4. **Review Process**: All PRs undergo maintainer review
+5. **Testing**: Ensure all tests pass and add new tests for new features
 
 ## Style Guidelines
-- **Indentation**: Use 4 spaces for indentation.
-- **Line Length**: Limit lines to 80 characters where possible to improve readability.
-- **Naming**: Use descriptive and consistent names for variables and functions.
-- **No Warnings**: Ensure there are no compiler or linter warnings.
+- **Indentation**: 4 spaces
+- **Line Length**: 80 characters where possible
+- **Naming**: Descriptive and consistent names
+- **No Warnings**: Ensure clean compilation
 
-Please be aware that some warnings may not be displayed consistently across all devices or environments. For example, certain compilers, IDEs, or terminal environments may not show  the same set of warnings, or they may suppress some warnings by default. Please make sure that code is properly reviewed and tested in a variety of environments to catch potential issues.
+## 🏷️ Issue Labels Guide
 
-## Additional Information
-Feel free to reach out to the maintainers if you have questions or need guidance.  
-Thank you for helping make Multiconvert better!
-- - -
-Thank you for contributing to Multiconvert! Your contributions are valuable and help improve the project for everyone.
-- - -
-This file provides detailed instructions for contributors and emphasizes the standards and review process required for maintaining high code quality.  
-Let me know if you’d like any adjustments or additional sections!
+When creating issues or PRs, use these labels:
+- `help wanted` - Community help needed
+- `good first issue` - Great for new contributors  
+- `installer` - Related to packaging/installation
+- `documentation` - Documentation improvements
+- `enhancement` - New features
+- `bug` - Bug fixes
+
+## Recognition
+
+Contributors will be:
+- Listed in AUTHORS.md
+- Mentioned in release notes
+- Given credit in documentation
+
+## Getting Help
+
+- Comment on existing issues
+- Join our discussions tab
+- Tag maintainers (@TheSkyler-Dev) for questions
+
+---
+
+**Priority Areas for Contributors:**
+1. 📦 Windows installer fixes (Issue #19)
+2. 🍺 Homebrew formula creation
+3. 📋 Package manager submissions
+4. 🔄 CI/CD improvements
+5. 📖 Documentation enhancements
+
+Thank you for contributing to Netcalc! Your help makes this project better for everyone.
