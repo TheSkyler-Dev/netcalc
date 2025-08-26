@@ -135,7 +135,9 @@ int main(int argc, char** argv){
 
     if(calcAddressable){
         fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
+
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin).to_ulong - 1);
+        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin);
     }
 
     if(calcBroadcast){
@@ -156,6 +158,7 @@ int main(int argc, char** argv){
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Address: {}\n", bitsToIP(ipBin & subnetBin));
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Network Range: {} - {}\n", bitsToIP(ipBin & subnetBin), bitsToIP(ipBin | ~subnetBin));
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin).to_ulong - 1);
+        fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP(ipBin | ~subnetBin);
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Number of Addressable Hosts: {}\n", calcAddressableHosts(subnetBin));
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Broadcast Address: {}\n", bitsToIP(ipBin | ~subnetBin));
     };
