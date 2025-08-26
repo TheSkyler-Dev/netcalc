@@ -146,7 +146,7 @@ int main(int argc, char** argv){
 
     if(calcAddressable){
         std::cout << std::format("{}{}IP: {}{}{}\n", FG_CYAN, BOLD, ipAddr, subnet, RESET);
-        std::cout << std::format("{}Addressable Host Range: {} - {}{}", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin - 1).to_ulong() - 1), RESET);
+        std::cout << std::format("{}Addressable Host Range: {} - {}{}", FG_WHITE, bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | (~subnetBin)).to_ulong() - 1), RESET);
     }
 
     if(calcBroadcast){
