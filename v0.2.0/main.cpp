@@ -135,7 +135,6 @@ int main(int argc, char** argv){
 
     if(calcAddressable){
         fmt::print(fmt::fg(fmt::color::steel_blue) | fmt::emphasis::bold, "IP: {}{}\n", ipAddr, subnet);
-
         fmt::print(fmt::fg(fmt::color::light_steel_blue), "Addressable Host Range: {} - {}\n", bitsToIP((ipBin & subnetBin).to_ulong() + 1), bitsToIP((ipBin | ~subnetBin).to_ulong() - 1);
     }
 
