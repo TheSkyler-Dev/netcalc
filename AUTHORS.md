@@ -4,7 +4,7 @@ This file lists the contributors to the Netcalc project. Thank you to everyone w
 
 ## Project Maintainers
 
-- **I. Nikiforov** ([@TheSkyler-Dev](https://github.com/TheSkyler-Dev)) - Project Creator & Lead Maintainer
+- **Skyler** ([@TheSkyler-Dev](https://github.com/TheSkyler-Dev)) - Project Creator & Lead Maintainer
   - Original concept and implementation
   - Core networking calculations engine
   - Cross-platform build system
