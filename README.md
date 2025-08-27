@@ -93,7 +93,7 @@ netcalc --help
    make
    ```
 ### :warning: Note: Installers for `netcalc`
-Installers are still a work in progress and do not work yet (help wanted - see Issue [#19](https://github.com/TheSkyler-Dev/netcalc/issues/19). **It is advised to not download the installers provided in release v0.2.0!** In the meantime, binaries, .deb packages and tarballs are available.
+Installers are still a work in progress and do not work yet (help wanted - see Issue [#19](https://github.com/TheSkyler-Dev/netcalc/issues/19)). **It is advised to not download the installers provided in release v0.2.0!** In the meantime, binaries, .deb packages and tarballs are available.
 
 # Commands
 
