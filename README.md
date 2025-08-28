@@ -96,7 +96,7 @@ netcalc --help
 Installers are still a work in progress and do not work yet (help wanted - see Issue [#19](https://github.com/TheSkyler-Dev/netcalc/issues/19)). **It is advised to not download the installers provided in release v0.2.0!** In the meantime, binaries, .deb packages and tarballs are available.
 
 # Example usage:
-Example 1
+Example 1, Calculating all network characteristics
 ```bash
 netcalc 192.168.10.50 --sn /24 -A
 ```
@@ -112,7 +112,7 @@ Number of Addressable Hosts: 254
 Broadcast Address: 192.168.10.255
 ```
 ---
-Example 2
+Example 2, Calculating the network range only
 ```bash
 netcalc 10.0.0.0 --sn /8 -r
 ```
@@ -122,7 +122,7 @@ IP: 10.0.0.0/8
 Network Range: 10.0.0.0 - 10.255.255.255
 ```
 ---
-Example 3
+Example 3, Identifying network type
 ```bash
 netcalc 172.16.5.100 --sn /20 -i
 ```
