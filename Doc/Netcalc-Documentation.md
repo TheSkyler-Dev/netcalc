@@ -11,7 +11,8 @@ For Windows native PowerShell, you may need to enable ANSI escape code support.
 # Getting Started
 All you need to start using or contributing to `netcalc` 
 
-## Dependencies 
+## Dependencies (building from source)
+- [CLI11](https://github.com/CLIUtils/CLI11) by [CLIUtils](https://github.com/CLIUtils) (CMakeLists is set up to fetch this dependency on build time) 
 - **CMake 3.25.0 or later**
 - **a C++ 20-compatible compiler (see [Compiler Support for C++ 20](https://en.cppreference.com/w/cpp/compiler_support/20) for compatible compilers)**
 
