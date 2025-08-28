@@ -6,7 +6,7 @@
 ![Static Badge](https://img.shields.io/badge/Next_version-in_development-orange?style=flat)
 
 
-Netcalc (`netcalc`) - a safe, fast command line utility program to calculate IPv4/IPv6 network characteristics without touching any system or networ configurations.
+Netcalc (`netcalc`) - a safe, fast command line utility program to calculate IPv4/IPv6 network characteristics without touching any system or network configurations.
 
 # Compatibility
 Compatible with any terminal that supports ANSI escape codes (shell, bash, pwsh, Zsh)
@@ -81,7 +81,7 @@ netcalc --help
    ```
 2. move into the directory for your desired version of `netcalc`
    ```bash
-   cd netcalc/[your desired version]
+   cd netcalc
    ```
 3. make a build directory and move into it
    ```bash
