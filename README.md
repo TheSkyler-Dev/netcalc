@@ -95,27 +95,7 @@ netcalc --help
 ### :warning: Note: Installers for `netcalc`
 Installers are still a work in progress and do not work yet (help wanted - see Issue [#19](https://github.com/TheSkyler-Dev/netcalc/issues/19)). **It is advised to not download the installers provided in release v0.2.0!** In the meantime, binaries, .deb packages and tarballs are available.
 
-# Commands
-
-Main: `netcalc`
-
-Example usage (all platforms): 
-```powershell
-netcalc 192.168.10.50 --sn /24 -A
-```
-Important: Do not forget to use the `--sn` flag between the IP address and the CIDR subnet mask! Otherwise it won't work!
-## Flags
-
-- `-A`: calculate all network characteristics
-- `-b`: only calculate broadcast address
-- `-r`: calculate network range (addressable hosts + broadcast and network)
-- `-n`: calculate network address
-- `-a`: calculate addressabe host range only
-- `-i`: identify network type
-- `-s`: calculate subnet mask
-- `-h`: display help/list valid flags and usage
-
-**Example usage:**
+# Example usage:
 Example 1
 ```bash
 netcalc 192.168.10.50 --sn /24 -A
