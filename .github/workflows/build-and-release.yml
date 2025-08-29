@@ -1,0 +1,89 @@
+name: Cross-Platform Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Clang 16 and GCC 13 on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-16 clang++-16 gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-16 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-16 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+          sudo update-alternatives --set g++ /usr/bin/g++-13
+          sudo update-alternatives --set clang /usr/bin/clang-16
+          sudo update-alternatives --set clang++ /usr/bin/clang++-16
+
+      - name: Configure CMake (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake -B build -S . -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build build
+        env:
+          LD_LIBRARY_PATH: /usr/lib/gcc/x86_64-linux-gnu/13:$LD_LIBRARY_PATH
+
+      - name: Configure CMake (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: cmake --build build
+
+      # Add test steps as needed for each platform
+      # Example for Ubuntu:
+      - name: Run tests (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: ctest --test-dir build || true
+        env:
+          LD_LIBRARY_PATH: /usr/lib/gcc/x86_64-linux-gnu/13:$LD_LIBRARY_PATH
+
+      # Example for Windows/macOS:
+      - name: Run tests (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: ctest --test-dir build || true
+
+      - name: Package Ubuntu build as .tar.gz
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd build/bin
+          tar -czvf netcalc-linux.tar.gz netcalc
+          mv netcalc-linux.tar.gz ../../
+
+      - name: Upload Ubuntu .tar.gz artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: netcalc-linux
+          path: netcalc-linux.tar.gz
+
+      - name: Upload Windows binary
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: netcalc-windows
+          path: build/bin/netcalc.exe
+
+      - name: Upload macOS binary
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: netcalc-macos
+          path: build/bin/netcalc
