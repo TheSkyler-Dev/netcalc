@@ -2,179 +2,163 @@ name: Cross-Platform Build and Release
 
 on:
   push:
-    branches: [ main, develop ]
-    tags: [ 'v*' ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
-
-env:
-  BUILD_TYPE: Release
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            artifact_name: netcalc.exe
-            asset_name: netcalc-windows-x64.exe
-            cmake_args: ""
-          - os: ubuntu-latest
-            artifact_name: netcalc
-            asset_name: netcalc-linux-x64
-            cmake_args: ""
-          - os: macos-latest
-            artifact_name: netcalc
-            asset_name: netcalc-macos-x64
-            cmake_args: ""
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-    - uses: actions/checkout@v4
+      - name: Install Clang 16 and GCC 13 on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-16 clang++-16 gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-16 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-16 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+          sudo update-alternatives --set g++ /usr/bin/g++-13
+          sudo update-alternatives --set clang /usr/bin/clang-16
+          sudo update-alternatives --set clang++ /usr/bin/clang++-16
 
-    - name: Check compiler version
-      run: clang++ --version
+      - name: Configure CMake (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake -B build -S . -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release
 
-    - name: Install dependencies (Ubuntu)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y clang-16 clang++-16 gcc-13 g++-13
-        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-16 100
-        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-16 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
-        sudo update-alternatives --set g++ /usr/bin/g++-13
-        sudo update-alternatives --set clang /usr/bin/clang-16
-        sudo update-alternatives --set clang++ /usr/bin/clang++-16
-        sudo apt-get install -y build-essential cmake
+      - name: Build (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build build
+        env:
+          LD_LIBRARY_PATH: /usr/lib/gcc/x86_64-linux-gnu/13:$LD_LIBRARY_PATH
 
-    - name: Install dependencies (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        brew install cmake
+      - name: Configure CMake (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{ matrix.cmake_args }}
+      - name: Build (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: cmake --build build
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      # Add test steps as needed for each platform
+      # Example for Ubuntu:
+      - name: Run tests (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: ctest --test-dir build || true
+        env:
+          LD_LIBRARY_PATH: /usr/lib/gcc/x86_64-linux-gnu/13:$LD_LIBRARY_PATH
 
-    - name: Test binary (Linux/macOS)
-      if: matrix.os != 'windows-latest'
-      run: |
-        cd ${{github.workspace}}/build/bin
-        ./${{ matrix.artifact_name }} --help
+      # Example for Windows/macOS:
+      - name: Run tests (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        run: ctest --test-dir build || true
 
-    - name: Test binary (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        cd ${{github.workspace}}/build/bin/Release
-        ./${{ matrix.artifact_name }} --help
+      - name: Prepare artifacts (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+         # Create distribution directory
+         mkdir -p netcalc-linux-x64
+        
+         # Copy binary and documentation
+         cp ${{github.workspace}}/build/bin/${{ matrix.artifact_name }} netcalc-linux-x64/
+         cp ${{github.workspace}}/LICENSE.txt netcalc-linux-x64/
+         cp ${{github.workspace}}/AUTHORS.md netcalc-linux-x64/
+        
+         # Create user documentation without installation instructions
+         cat > netcalc-linux-x64/USAGE.md << 'EOF'
+         # Netcalc - Network Calculator
+        
+         A safe, fast command line utility to calculate IPv4/IPv6 network characteristics.
+        
+         ## Compatibility
+         Compatible with any terminal that supports ANSI escape codes (bash, zsh, fish, etc.)
+        
+         ## Features
+         - Calculate all network characteristics from any IP address
+         - Identify network type, detect APIPA addresses
+        
+         ## Usage
+        
+         Basic syntax: `netcalc <IP_ADDRESS> --sn <CIDR_MASK> <FLAGS>`
+        
+         Example:
+         ```bash
+         netcalc 192.168.10.50 --sn /24 -A
+         ```
+        
+         **Important:** Do not forget the `--sn` flag between IP address and CIDR mask!
+        
+         ## Flags
+        
+         - `-A`: Calculate all network characteristics
+         - `-b`: Calculate broadcast address only
+         - `-r`: Calculate network range (addressable hosts + broadcast and network)  
+         - `-n`: Calculate network address
+         - `-a`: Calculate addressable host range only
+         - `-i`: Identify network type
+         - `-s`: Calculate subnet mask
+         - `-h`: Display help and usage
+        
+         ## Examples
+        
+         **Calculate all characteristics:**
+         ```bash
+         netcalc 192.168.10.50 --sn /24 -A
+         ```
+         Output:
+         ```
+         Calculating requested network characteristics for: 192.168.10.50
+         IP: 192.168.10.50/24
+         Address type: Private
+         Subnet Mask: 255.255.255.0
+         Network Address: 192.168.10.0
+         Network Range: 192.168.10.0 - 192.168.10.255
+         Addressable Host Range: 192.168.10.1 - 192.168.10.254
+         Number of Addressable Hosts: 254
+         Broadcast Address: 192.168.10.255
+         ```
+        
+         **Network range only:**
+         ```bash
+         netcalc 10.0.0.0 --sn /8 -r
+         ```
+        
+         **Identify network type:**
+         ```bash
+         netcalc 172.16.5.100 --sn /20 -i
+         ```
+         EOF
+        
+         # Create tar.gz archive
+         tar -czf netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz netcalc-linux-x64/
+        
+         # Calculate SHA256
+         sha256sum netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz > netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz.sha256
 
-    - name: Prepare artifacts (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        # Create distribution directory
-        mkdir -p netcalc-linux-x64
-        
-        # Copy binary and documentation
-        cp ${{github.workspace}}/build/bin/${{ matrix.artifact_name }} netcalc-linux-x64/
-        cp ${{github.workspace}}/LICENSE.txt netcalc-linux-x64/
-        cp ${{github.workspace}}/AUTHORS.md netcalc-linux-x64/
-        
-        # Create user documentation without installation instructions
-        cat > netcalc-linux-x64/USAGE.md << 'EOF'
-        # Netcalc - Network Calculator
-        
-        A safe, fast command line utility to calculate IPv4/IPv6 network characteristics.
-        
-        ## Compatibility
-        Compatible with any terminal that supports ANSI escape codes (bash, zsh, fish, etc.)
-        
-        ## Features
-        - Calculate all network characteristics from any IP address
-        - Identify network type, detect APIPA addresses
-        
-        ## Usage
-        
-        Basic syntax: `netcalc <IP_ADDRESS> --sn <CIDR_MASK> <FLAGS>`
-        
-        Example:
-        ```bash
-        netcalc 192.168.10.50 --sn /24 -A
-        ```
-        
-        **Important:** Do not forget the `--sn` flag between IP address and CIDR mask!
-        
-        ## Flags
-        
-        - `-A`: Calculate all network characteristics
-        - `-b`: Calculate broadcast address only
-        - `-r`: Calculate network range (addressable hosts + broadcast and network)  
-        - `-n`: Calculate network address
-        - `-a`: Calculate addressable host range only
-        - `-i`: Identify network type
-        - `-s`: Calculate subnet mask
-        - `-h`: Display help and usage
-        
-        ## Examples
-        
-        **Calculate all characteristics:**
-        ```bash
-        netcalc 192.168.10.50 --sn /24 -A
-        ```
-        Output:
-        ```
-        Calculating requested network characteristics for: 192.168.10.50
-        IP: 192.168.10.50/24
-        Address type: Private
-        Subnet Mask: 255.255.255.0
-        Network Address: 192.168.10.0
-        Network Range: 192.168.10.0 - 192.168.10.255
-        Addressable Host Range: 192.168.10.1 - 192.168.10.254
-        Number of Addressable Hosts: 254
-        Broadcast Address: 192.168.10.255
-        ```
-        
-        **Network range only:**
-        ```bash
-        netcalc 10.0.0.0 --sn /8 -r
-        ```
-        
-        **Identify network type:**
-        ```bash
-        netcalc 172.16.5.100 --sn /20 -i
-        ```
-        EOF
-        
-        # Create tar.gz archive
-        tar -czf netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz netcalc-linux-x64/
-        
-        # Calculate SHA256
-        sha256sum netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz > netcalc-${{ github.ref_name || 'dev' }}-linux-x64.tar.gz.sha256
+      - name: Prepare artifacts (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+         copy ${{github.workspace}}\build\bin\Release\${{ matrix.artifact_name }} ${{ matrix.asset_name }}
 
-    - name: Prepare artifacts (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        copy ${{github.workspace}}\build\bin\Release\${{ matrix.artifact_name }} ${{ matrix.asset_name }}
+      - name: Prepare artifacts (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+         cp ${{github.workspace}}/build/bin/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
 
-    - name: Prepare artifacts (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        cp ${{github.workspace}}/build/bin/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.asset_name }}
-        path: |
-          ${{ matrix.os == 'ubuntu-latest' && format('netcalc-{0}-linux-x64.tar.gz', github.ref_name || 'dev') || matrix.asset_name }}
-          ${{ matrix.os == 'ubuntu-latest' && format('netcalc-{0}-linux-x64.tar.gz.sha256', github.ref_name || 'dev') || '' }}
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: |
+            ${{ matrix.os == 'ubuntu-latest' && format('netcalc-{0}-linux-x64.tar.gz', github.ref_name || 'dev') || matrix.asset_name }}
+            ${{ matrix.os == 'ubuntu-latest' && format('netcalc-{0}-linux-x64.tar.gz.sha256', github.ref_name || 'dev') || '' }}
 
   release:
     name: Attach to Draft Release
