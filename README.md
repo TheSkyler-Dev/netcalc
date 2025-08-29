@@ -43,26 +43,16 @@ netcalc -h
 or
 netcalc --help
 ```
-## Debian-based Linux distros
-1. download `netcalc-v0.2.0.deb`
-5. install by double-clicking or use the following command:
-```bash
-cd /path/to/netcalc-v0.2.0.deb
-sudo dpkg -i netcalc-v0.2.0.deb
-```
-Note that the `postinst` script will automatically set the correct permissions to use `netcalc`. Even so, it is good practice to doublecheck with:
-```bash
-ls -l /usr/local/bin
-```
+
 ### `.tar.gz` tarball (manual installation)
-1. Download `netcalc-0.2.0-Linux.tar.gz`
+1. Download `netcalc-[version]-Linux.tar.gz`
 2. extract the package with
 ```bash
-tar -xvzf netcalc-0.2.0-Linux.tar.gz
+tar -xvzf netcalc-[version]-Linux.tar.gz
 ```
 4. navigate to the extracted package and find the binary
 ```bash
-cd netcalc-0.2.0-Linux/bin
+cd netcalc-[version]-Linux/bin
 ```
 7. Finally move the binary to `usr/local/bin`
 ```bash
